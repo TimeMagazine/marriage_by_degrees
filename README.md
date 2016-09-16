@@ -11,11 +11,11 @@ The data was extracted from [ipums.org](ipums.org), the fantastic Census microda
 [Citation](https://usa.ipums.org/usa/cite.shtml): IPUMS-USA, University of Minnesota, [www.ipums.org](ipums.org).
 
 ## Running the script
-Open [`analyze.R`](analyze.R) to see the heavily commented code, `data.Rproj` in RStudio for a nice visual version, or just run the file:
-
 You need the "foreign" library, which you can install manually through R interface or like so:
 
 	install.packages("foreign")
+
+Then open [`analyze.R`](analyze.R) to see the heavily commented code, `data.Rproj` in RStudio for a nice visual version, or just run the file:
 
 	RScript analyze.R
 
