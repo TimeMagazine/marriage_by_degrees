@@ -9,10 +9,15 @@
 # Please forgive sloppy code, or better yet, correct it with 
 # a pull request or email to chris.wilson@time.com
 
+
+# to install "foreign", run `install.packages("foreign")` or manually install from the R interface
 library(foreign)
 # load the data from IPUMS. Make sure you unzip it first. This will take a minute
 print("Loading data (will take about a minute)");
 data <- read.spss("ipums/usa_00094.sav", to.data.frame = TRUE);
+
+# IPUMS-USA, University of Minnesota, www.ipums.org.
+# https://usa.ipums.org/usa/cite.shtml
 
 # reduce that population to only those where the spouse also has a degree
 two_degrees <- subset(data, data$DEGFIELDD_SP != "N/A" & !is.na(data$DEGFIELDD_SP))
