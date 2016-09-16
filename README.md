@@ -6,12 +6,12 @@ The R code to calculate marital compatibility between people with different acad
 + Unzip the IPUMS data (`ipums/usa_00094.sav.zip`) file manually or via `unzip ipums/usa_00094.sav.zip`
 
 ## The Data
-The data was extracted from [ipums.org](ipums.org), the fantastic Census microdata site, in SPSS format (`.sav`) for easy importing into R. You can see the codebook for the extract at [`ipums/usa_00094.txt`](ipums/usa_00094.txt), which contains all the information on the variables that were extracted.
+The raw data was compiled from six years of American Community Survey data via [ipums.org](ipums.org), the fantastic Census microdata site, in SPSS format (`.sav`) for easy importing into R. You can see the codebook for the extract at [`ipums/usa_00094.txt`](ipums/usa_00094.txt), which contains all the information on the variables that were extracted.
 
 [Citation](https://usa.ipums.org/usa/cite.shtml): IPUMS-USA, University of Minnesota, [www.ipums.org](ipums.org).
 
 ## Running the script
-You need the "foreign" library, which you can install manually through R interface or like so:
+You need the "foreign" library, which you can install manually through the R interface or like so:
 
 	install.packages("foreign")
 
