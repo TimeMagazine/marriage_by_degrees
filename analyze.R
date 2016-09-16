@@ -23,7 +23,8 @@ data <- read.spss("ipums/usa_00094.sav", to.data.frame = TRUE);
 two_degrees <- subset(data, data$DEGFIELDD_SP != "N/A" & !is.na(data$DEGFIELDD_SP))
 
 # get the total population by summing the individual weights of each person
-# in the sample
+# in the sample. This is technically twice the size of the population since
+# each couple is in the data twice, once and the primary and once as the spouse
 population <- sum(two_degrees$PERWT)
 
 # load the simplified list of degrees that TIME curated from DEGFIELDD
@@ -140,7 +141,7 @@ colnames(frequencies) <- c("degree", "frequency");
 
 pare_down <- function(deg) {
   freq <- frequencies$frequency[frequencies$degree==deg];
-  if (is.na(freq) | freq < 10) {
+  if (is.na(freq) | freq < 20) {
     print(paste("Not enough",deg, freq));
     filtered = subset(filtered, degree != deg);
     filtered = subset(filtered, degree_spouse != deg);
