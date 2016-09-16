@@ -10,6 +10,7 @@
 
 library(foreign)
 # load the data from IPUMS. Make sure you unzip it first. This will take a minute
+print("Loading data (will take about a minute)");
 data <- read.spss("ipums/usa_00094.sav", to.data.frame = TRUE);
 
 # reduce that population to only those where the spouse also has a degree
@@ -26,7 +27,7 @@ degrees <- read.csv("canonical.csv")
 # function to simplify the degrees for both partners
 simplifyDegrees <- function(degfieldd) {
   canonical <- as.character(degrees$canonical[degrees$detailed==degfieldd]);
-  print(paste(degfieldd,"-",canonical));
+  # print(paste(degfieldd,"-",canonical));
   two_degrees$DEGSIMPLE[two_degrees$DEGFIELDD==degfieldd] <- canonical
   two_degrees$DEGSIMPLE_SP[two_degrees$DEGFIELDD_SP==degfieldd] <- canonical
   return (two_degrees);
@@ -34,6 +35,8 @@ simplifyDegrees <- function(degfieldd) {
 
 # run this function for every specific degree
 # this will take about 30 seconds
+
+print("Reducing complexity in degree definitions");
 for (detailed in degrees$detailed) {
   two_degrees <- simplifyDegrees(detailed)
 }
@@ -41,7 +44,7 @@ for (detailed in degrees$detailed) {
 # every couple is in the data twice, once as the primary and once as the spouse
 # let's confirm that we have the same number of degrees
 # in both DEGSIMPLE AND DEGSIMPLE_SP
-table(two_degrees$DEGSIMPLE) == table(two_degrees$DEGSIMPLE_SP)
+# table(two_degrees$DEGSIMPLE) == table(two_degrees$DEGSIMPLE_SP)
 
 # Let's look at overall popularity of degrees in primaries and spouses
 # we're going to look at the raw record count and the weighted count
@@ -70,8 +73,8 @@ popularity$percent <- popularity$weighted_degree / population * 100
 popularity$percent_spouse <- popularity$weighted_spouse / population * 100
 
 # phew, these sum to 100
-sum(popularity$percent)
-sum(popularity$percent_spouse)
+# sum(popularity$percent)
+# sum(popularity$percent_spouse)
 
 #NOTE
 # You may notice that the percentages for percent and percent_spouse
@@ -79,13 +82,15 @@ sum(popularity$percent_spouse)
 # This is because a person and his or her spouse do not have exactly
 # the same weight. We expect this. But the values are VERY close
 
+print("Calculating matches");
+
 # now let's do the same thing for every combination of major
 count    <- aggregate(two_degrees$PERWT, by=list("degree" = two_degrees$DEGSIMPLE, "degree_spouse" = two_degrees$DEGSIMPLE_SP), FUN = length)
 weighted <- aggregate(two_degrees$PERWT, by=list("degree" = two_degrees$DEGSIMPLE, "degree_spouse" = two_degrees$DEGSIMPLE_SP), FUN = sum)
 
 # and combine again
-colnames(count) <- c("degree", "degree_spouse","count")
-colnames(weighted) <- c("degree", "degree_spouse","weighted")
+colnames(count) <- c("degree", "degree_spouse", "count");
+colnames(weighted) <- c("degree", "degree_spouse", "weighted");
 matches <- merge(count, weighted, by=c("degree", "degree_spouse"))
 
 # okay, now we need to find the RELATIVE popularity of a degree 
@@ -106,7 +111,7 @@ matches$percent <- apply(matches, 1, popularity_by_degree_combo)
 odds_by_degree_combo <- function(match) {
   overall_percent = popularity$percent_spouse[popularity$degree==match[["degree_spouse"]]]
   specific_percent = as.numeric(match[["percent"]]);
-  print(paste(match[["degree"]], match[["degree_spouse"]], match[["degree_spouse"]], overall_percent, specific_percent));
+  # print(paste(match[["degree"]], match[["degree_spouse"]], match[["degree_spouse"]], overall_percent, specific_percent));
   
   # and what percent of people with the spouses degree married someone with the 
   # primary's degree?
@@ -120,9 +125,26 @@ matches$odds <- apply(matches, 1, odds_by_degree_combo)
 # are not perfectly reciprocal, but very close
 
 # We only want combos with at least 30 examples
+
 filtered = subset(matches, matches$count >= 30);
 
+# and only those degrees that show up in over 10 combinations
+frequencies = as.data.frame(table(filtered$degree))
+colnames(frequencies) <- c("degree", "frequency");
 
+pare_down <- function(deg) {
+  freq <- frequencies$frequency[frequencies$degree==deg];
+  if (is.na(freq) | freq < 10) {
+    print(paste("Not enough",deg, freq));
+    filtered = subset(filtered, degree != deg);
+    filtered = subset(filtered, degree_spouse != deg);
+  }
+  return (filtered);
+}
 
+for (deg in unique(filtered$degree)) {
+  filtered = pare_down(deg)
+}
 
+print("Writing data file");
 write.csv(filtered, "filtered.csv")

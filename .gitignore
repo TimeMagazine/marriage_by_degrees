@@ -1,5 +1,7 @@
 ipums/usa_00094.sav
 .DS_Store
+filtered.csv
+ipums/__MACOSX/
 
 # History files
 .Rhistory
