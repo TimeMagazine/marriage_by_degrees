@@ -1,10 +1,11 @@
 # Code for degree compability
 # Link TK
 # By Chris Wilson
-# LICENSE: Creative Commons Attribution 3.0
-# https://creativecommons.org/licenses/by/3.0/us/
-# DISCLAIMER: I am not a pro at R, so all calculations here were
-# tested against manual SQL queries of the same dataset
+# LICENSE: Creative Commons Attribution 4.0
+# https://creativecommons.org/licenses/by/4.0/
+# DISCLAIMER: I am not a pro at R but any stretch,
+# so all calculations here were tested against 
+# manual SQL queries of the same dataset
 # Please forgive sloppy code, or better yet, correct it with 
 # a pull request or email to chris.wilson@time.com
 
