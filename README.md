@@ -1,5 +1,5 @@
 # Marriage by Degrees
-The R code to calculate marital compatibility between people with different academic degrees
+The R code to calculate [marital compatibility between people with different academic degrees](http://time.com/4497291/college-degree-major-love-marriage/)
 
 ## Getting started
 + You need [R](https://www.r-project.org/), and I recommend [RStudio](https://www.rstudio.com/)
