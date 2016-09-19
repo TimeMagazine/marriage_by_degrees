@@ -1,9 +1,9 @@
 # Code for degree compability
-# Link TK
+# Link: http://time.com/4497291/college-degree-major-love-marriage/
 # By Chris Wilson
 # LICENSE: Creative Commons Attribution 4.0
 # https://creativecommons.org/licenses/by/4.0/
-# DISCLAIMER: I am not a pro at R but any stretch,
+# DISCLAIMER: I am not a pro at R by any stretch,
 # so all calculations here were tested against 
 # manual SQL queries of the same dataset
 # Please forgive sloppy code, or better yet, correct it with 
@@ -132,7 +132,6 @@ matches$odds <- apply(matches, 1, odds_by_degree_combo)
 # are not perfectly reciprocal, but very close
 
 # We only want combos with at least 30 examples
-
 filtered = subset(matches, matches$count >= 30);
 
 # and only those degrees that show up in over 10 combinations
@@ -155,3 +154,8 @@ for (deg in unique(filtered$degree)) {
 
 print("Writing data file");
 write.csv(filtered, "filtered.csv")
+
+# For fun, let's look at who is most provincial
+same_majors <- subset(filtered, degree == degree_spouse)
+
+same_majors[order(-same_majors$odds),]
